@@ -1,0 +1,47 @@
+apply plugin: 'com.android.application'
+
+apply from: '../base.gradle'
+
+android {
+    defaultConfig {
+        applicationId "vip.qsos.form"
+    }
+
+    // 自定义apk名称含版本号信息
+    android.applicationVariants.all { variant ->
+        // 更新gradle 4.10.1+使用如下
+        variant.outputs.all {
+            outputFileName = "${apkName()}-${variant.versionCode}-${apkTime()}.apk"
+        }
+    }
+
+    signingConfigs {
+        release {}
+        debug {}
+    }
+
+    buildTypes {
+        release {
+            // 签名配置
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+dependencies {
+    implementation project(':filepicker-lib')
+
+    api 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    kapt 'com.github.bumptech.glide:compiler:4.9.0'
+}
+
+// 获取编译时间
+static def apkTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
+// 获取软件名称
+static def apkName() {
+    return "QSOS-FORM"
+}
