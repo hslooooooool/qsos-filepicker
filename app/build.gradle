@@ -4,7 +4,7 @@ apply from: '../base.gradle'
 
 android {
     defaultConfig {
-        applicationId "vip.qsos.form"
+        applicationId "vip.qsos.filepicker"
     }
 
     // 自定义apk名称含版本号信息
