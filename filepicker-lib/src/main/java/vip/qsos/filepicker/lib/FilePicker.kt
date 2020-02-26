@@ -42,11 +42,18 @@ class FilePicker : Fragment() {
     private var mLimitTime: Int = 10000
     /**默认文件类型*/
     private var mMimeTypes: Array<String> = arrayOf("*/*")
-        set(value) {
-            field = value
-            mMimeType = if (mMimeTypes.isEmpty()) "*/*" else mMimeTypes[0]
+    private var mIntentType: String? = null
+        get() {
+            if (field == null) {
+                field = "application/*"
+            }
+            return field
         }
-    private var mMimeType: String = "*/*"
+
+    fun setIntentType(intentType: String): FilePicker {
+        this.mIntentType = intentType
+        return this
+    }
 
     /**图片选择*/
     fun takeImage(@Sources.Type type: Int = Sources.CHOOSER, chooserTitle: String = "图片选择", listener: OnTListener<Uri>) {
@@ -220,7 +227,8 @@ class FilePicker : Fragment() {
     private fun createPickOne(): Intent {
         val pictureChooseIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         pictureChooseIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, isMultiple)
-        pictureChooseIntent.type = mMimeType
+        pictureChooseIntent.addCategory(Intent.CATEGORY_OPENABLE)
+        pictureChooseIntent.type = mIntentType
         pictureChooseIntent.putExtra(Intent.EXTRA_MIME_TYPES, mMimeTypes)
         pictureChooseIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
         /**临时授权app访问URI代表的文件所有权*/
